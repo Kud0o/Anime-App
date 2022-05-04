@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
 import 'package:anime_app/providers.dart';
-import 'package:anime_app/widgets.dart';
-
+//import 'package:anime_app/widgets.dart';
+import 'package:anime_app/layouts/home_screen.dart';
+import 'package:anime_app/layouts/categoried_form.dart';
 void main() {
   runApp(MyApp());
 }
@@ -15,7 +16,8 @@ class MyApp extends StatelessWidget {
     return 
     MultiProvider(
   providers: [
-  ChangeNotifierProvider(create: (_)=>ControllContent()),]
+  ChangeNotifierProvider(create: (_)=>ControllSearchContent()),
+  ChangeNotifierProvider(create: (_)=>ControllCategoredContent(),)]
   ,
   child: LayoutBuilder(                           //return LayoutBuilder
       builder: (context, constraints) {
@@ -24,7 +26,7 @@ class MyApp extends StatelessWidget {
             //initialize SizerUtil()
             SizerUtil().init(constraints, orientation);  //initialize SizerUtil
             return MaterialApp(
-      title: 'Anime Fan',
+      title: 'Anime Fan',debugShowCheckedModeBanner: false,
       theme: ThemeData(
          primarySwatch: Colors.blue,
       ),
@@ -56,48 +58,23 @@ class _MyHomePageState extends State<MyHomePage> {
 @override
  void initState(){
   super.initState();
-  Provider.of<ControllContent>(context,listen:false).begin();
+  Provider.of<ControllSearchContent>(context,listen:false).begin();
+  Provider.of<ControllCategoredContent>(context,listen:false).begin();
   
 
-}
-
-void inti(BuildContext context)
-{ Provider.of<ControllContent>(context,listen:false).begin();
-}
-  
+}  
   @override
   Widget build(BuildContext context) {
-  
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Anime'),
       ),
-      body: Center(
-        child: Stack(alignment: Alignment.bottomCenter ,
-          children: [ListView(//shrinkWrap:true,
-              children: [SearchBar(),
-              Column(
-                children:
-            Provider.of<ControllContent>(context,listen: true).animes.map((anime)=>AnimeCard(data:anime)).toList()),
-              SizedBox(height: 15.0.w,)
-            ],
-          ),
-
-           Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[FloatingActionButton(child: Icon(Icons.navigate_before),
-                  onPressed: ()async {await Provider.of<ControllContent>(context,listen:false).goPrev();}),
-                  FloatingActionButton(child: Icon(Icons.navigate_next),
-                  onPressed: ()async {await Provider.of<ControllContent>(context,listen:false).goNext();}),
-                
-                ],
-              ),
-          
-          ]
-        ),
-      ),
-     
+      body:Container(
+        child: 
+     //     CategoredForm(),  
+      MainScreen()
+      )
     );
   }
 }
